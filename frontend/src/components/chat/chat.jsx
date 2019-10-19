@@ -98,22 +98,22 @@ class Chat extends React.Component {
 
         this.socket.on('request_partner_data', () => {
             this.socket.emit('send_own_user_data', {
-                user_handle: this.state.ownHandle,
-                learning_language: languages[this.state.ownLearnLang],
-                sharing_language: languages[this.state.ownShareLang],
-                profile_picture: this.state.ownPic,
+                userHandle: this.state.ownHandle,
+                learnLang: languages[this.state.ownLearnLang],
+                shareLang: languages[this.state.ownShareLang],
+                profilePic: this.state.ownPic,
                 roomId: this.state.roomId,
-                message_array: this.state.messages
+                messageArray: this.state.messages
             })
         });
         
         this.socket.on('chat_partner_data', (partner_data) => {
             console.log(partner_data);
-            const partner_handle = partner_data['other_user_handle'];
-            const partner_learn_lang = partner_data['other_learn_lang'];
-            const partner_share_lang = partner_data['other_share_lang'];
-            const partner_pic = partner_data['other_profile_pic'];
-            const other_message_array = partner_data['other_message_array'];
+            const partner_handle = partner_data['partnerUserHandle'];
+            const partner_learn_lang = partner_data['partnerLearnLang'];
+            const partner_share_lang = partner_data['partnerShareLang'];
+            const partner_pic = partner_data['partnerProfilePic'];
+            const other_message_array = partner_data['partnerMessageArray'];
             const new_message_array = this.state.messages.length >= other_message_array.length ? this.state.messages : other_message_array;
             if (partner_handle !== this.state.ownHandle) {
                 this.setState({
@@ -181,8 +181,8 @@ class Chat extends React.Component {
         if (this.state.currentMessage !== '') {
             this.setState({ currentMessage: "" })
             this.socket.emit('chat_message', {
-                gif: false,
-                message: this.state.currentMessage.trim(),
+                isGif: false,
+                messageBody: this.state.currentMessage.trim(),
                 roomId: this.state.roomId,
                 userId: this.state.ownId
             });
@@ -193,8 +193,8 @@ class Chat extends React.Component {
         console.log('hello')
         console.log(e.currentTarget.src)
         this.socket.emit('chat_message', {
-            gif: true,
-            message: e.currentTarget.src,
+            isGif: true,
+            messageBody: e.currentTarget.src,
             roomId: this.state.roomId,
             userId: this.state.ownId
         });

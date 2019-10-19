@@ -19,7 +19,7 @@ class UsersIndex extends React.Component {
     }
 
     
-    this.possibleRoom = '';
+    this.possibleRooms = new Set();
     this.requestRoom = this.requestRoom.bind(this);
     this.socket = io();
 
@@ -79,12 +79,12 @@ class UsersIndex extends React.Component {
     }); 
 
     this.socket.on('possible_room', (room_id) => {
-      this.possibleRoom = room_id;
+      this.possibleRooms.add(room_id);
       console.log('possibleRoom set');
     });
 
     this.socket.on('verified_room', (room_id) => {
-      if (this.possibleRoom === room_id) {
+      if (this.possibleRooms.has(room_id)) {
         console.log('successfully matched to right room');
         this.props.saveRoomId(room_id);
         this.props.history.push('/chat')
